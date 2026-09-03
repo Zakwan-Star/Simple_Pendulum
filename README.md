@@ -9,26 +9,104 @@ This project investigates the motion of a simple pendulum by numerical solution 
 - to investigate the effect of the initial angular displacement on the motion
 
 ## Physics
-Consider a pendulum of mass m and length L of string fixed to the ceiling, deflected with an initial angle $\theta$ and allowed to swing under the influence of gravity.
+A simple pendulum consisting of a point mass $m$ attached to a string of length $L$ to the ceiling. The pendulum is displaced from equilibrium by angular displacement $\theta$ and released under the influence of gravity.
 
-From Newton 2nd law of rotational motion:
-
-$$
-\tau = I\alpha
-$$
-
-the gravitational 
-for a point mass:
+The equation of motion is obtained from the rotational form of Newton's second law,
 
 $$
-I = mL^2
+\tau = I\alpha.
 $$
 
-and,
+The gravitational torque is,
 
 $$
-\alpha = \frac{d^2\theta}{dt^2}
+\tau = -mgL\sin\theta,
 $$
 
-Therefore
+where the negative sign indicates that the torque acts toward the equilibrium position. For a point mass,
 
+$$
+I = mL^2,
+$$
+
+and
+
+$$
+\alpha = \frac{d^2\theta}{dt^2}.
+$$
+
+Substituting these relations, gives the nonlinear equation of motion,
+
+$$
+\boxed{
+\frac{d^2\theta}{dt^2} = -\frac{g}{L}\sin\theta
+}
+$$
+
+### First-Order Form
+
+For numerical integration using the fourth order Runge-Kutta (RK4) method, the second-order equation is expressed as a first-order equations. Defining the angular velocity as
+
+$$
+\omega = \frac{d\theta}{dt},
+$$
+
+thus
+
+$$
+\frac{d\theta}{dt} = \omega,
+$$
+
+$$
+\frac{d\omega}{dt} = -\frac{g}{L}\sin\theta.
+$$
+
+The corresponding state vector is
+
+$$
+\mathbf{y} =
+\begin{bmatrix}
+\theta \\ \omega
+\end{bmatrix}.
+$$
+
+## Analytical Solution
+
+For small angular displacements, the $\sin\theta$ term can be approximated by
+
+$$
+\sin\theta \approx \theta.
+$$
+
+Thus
+
+$$
+\frac{d^2\theta}{dt^2} = - \frac{g}{L}\theta
+$$
+
+$$
+\frac{d^2\theta}{dt^2} + \frac{g}{L}\theta = 0.
+$$
+
+This is the equation of a simple harmonic oscillator. For the initial conditions
+
+$$
+\theta(0)=\theta_0,
+\qquad
+\omega(0)=0,
+$$
+
+the analytical solution is
+
+$$
+\boxed{
+\theta(t) = \theta_0 \cos\left(\sqrt{\frac{g}{L}}\,t\right)
+}.
+$$
+
+This analytical solution is valid for small-angle approximation (can be proved by Taylor series). Therefore, its agreement with the numerical solution is expected to decrease as the initial angular displacement increases.
+
+## Numerical Method
+
+This nonlinear equation is solved using the classical fourth-order Runge-Kutta
+(RK4) method, implemented from scratch in Python.
